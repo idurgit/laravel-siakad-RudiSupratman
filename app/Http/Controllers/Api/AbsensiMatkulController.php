@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ScheduleResource;
-use App\Models\Schedule;
+use App\Models\AbsensiMatkul;
 use Illuminate\Http\Request;
 
-class ScheduleController extends Controller
+class AbsensiMatkulController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +14,9 @@ class ScheduleController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $schedule = Schedule::where('student_id', '=', $user->id)->get();
-        return ScheduleResource::collection($schedule->load('subject', 'subject.lecturer', 'student'));
+        $absensiMatkul = AbsensiMatkul::where('student_id', '=', $user->id)->paginate(10);
+
+        return $absensiMatkul;
     }
 
     /**
@@ -24,7 +24,18 @@ class ScheduleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'schedule_id' => 'required|exists:schedules,id',
+            'kode_absensi' => 'required',
+            'tahun_akademik' => 'required',
+            'semester' => 'required',
+            'pertemuan' => 'required',
+            'latitude' => 'required',
+            'longitude' => 'required',
+        ]);
+
+        $absensiMatkul = AbsensiMatkul::create($request->all());
+        return $absensiMatkul;
     }
 
     /**
