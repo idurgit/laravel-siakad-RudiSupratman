@@ -9,11 +9,29 @@ class AbsensiMatkul extends Model
 {
     use HasFactory;
 
-    public function schedule() {
+    protected $fillable = [
+        'schedule_id',
+        'student_id',
+        'kode_absensi',
+        'tahun_akademik',
+        'semester',
+        'pertemuan',
+        'status',
+        'keterangan',
+        'latitude',
+        'longitude',
+        'nilai',
+        'created_by',
+        'updated_by',
+    ];
+
+    public function schedule()
+    {
         return $this->belongsTo(Schedule::class);
     }
 
-    public function student() {
+    public function student()
+    {
         return $this->belongsTo(User::class);
     }
 }

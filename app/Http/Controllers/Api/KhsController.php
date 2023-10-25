@@ -15,7 +15,9 @@ class KhsController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $khs = Khs::where('student_id', '=', $user->id)->get()->load('subject');
+        $khs = Khs::where('student_id', '=', $user->id)
+            ->orderBy('id', 'desc')
+            ->paginate(10);
         // $allKhs = Khs::paginate(10);
         return KhsResource::collection($khs);
     }
